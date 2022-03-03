@@ -77,8 +77,6 @@ footer {
   align-items: flex-end;
 }
 
-.author-information a {}
-
 aside {
   width: 23vw;
   height: 90vh;
@@ -96,6 +94,13 @@ main {
   overflow: auto;
 }
 
+.main___long {
+  width: 81vw;
+  height: 92vh;
+  margin-left: 19vw;
+
+  overflow: auto;
+}
 
 
 ::-webkit-scrollbar {
@@ -105,6 +110,23 @@ main {
 .breadcrumbs {
   width: 58vw;
   height: 4vh;
+
+  background-color: #fff;
+  border: var(--component-border);
+
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.breadcrumbs__long {
+  width: 81vw;
+  height: 4vh;
+
+  padding-left: 5%;
+
+  display: flex;
+  align-items: center;
 
   background-color: #fff;
   border: var(--component-border);
@@ -190,12 +212,14 @@ main {
 
   display: flex;
 
+  color: var(--button-color);
   list-style: none;
 }
 
 .breadcrumbs_links a {
   margin: 0 1vw;
 
+  color: var(--button-color);
   text-decoration: none;
 }
 
@@ -333,4 +357,80 @@ main {
 
   color: #fff;
   background-color: var(--button-color);
+}
+
+.twit-wrapper {
+  padding: 2.6% 0 2.6% 8.7%;
+  border: var(--component-border);
+  position: sticky;
+  background: var(--bg-color);
+  top: 4vh;
+  z-index: 1;
+}
+
+.comments-list {
+  margin: 0 16vw;
+}
+
+.comment {
+  width: 49.1vw;
+  margin-bottom: 1.6%;
+  background-color: #fff;
+  border: var(--component-border);
+}
+
+.comment-header {
+  padding: 2.5%;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment-body {
+  margin: 0 7% 7% 7%;
+}
+
+.comment-input-wrapper {
+  width: 80%;
+  height: 10vh;
+  border-radius: 30px;
+  margin: 0 auto;
+  margin-top: 2%;
+
+  text-align: left;
+
+  background-color: #fff;
+}
+
+.comment-input button {
+  width: 8vw;
+  height: 2.8vh;
+  border-radius: 20px;
+  border: none;
+  margin-top: 1vmax;
+  margin-bottom: 1vmax;
+
+  background-color: var(--button-color);
+  color: #fff;
+}
+
+.comment-input textarea {
+  width: 80%;
+  height: 70%;
+  margin: 2% 2.5%;
+  outline: none;
+  border: none;
+  resize: none;
+
+  font-size: 18px;
+}
+
+.comment-input {
+  background: var(--bg-color);
+  position: fixed;
+  bottom: 10vh;
+  width: 81vw;
+  z-index: 2;
+  border: var(--component-border);
+  text-align: center;
 }
