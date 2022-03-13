@@ -1,8 +1,6 @@
 ;const myModule = (function() {
   let user = 'Kirill';
   
-  //const test = () => tweets;
-  
   const getTweets = (skip = 0, top = 10, filterConfig = {}) => {
     const resultTweetsArr = [];
 
@@ -39,11 +37,44 @@
       resultTweetsArr.push(workingTweetsArr[i])      
     }
 
-    return resultTweetsArr
+    return resultTweetsArr.sort((a, b) => b.createdAt - a.createdAt);
+  };
+
+  const getTweet = (id) => {
+    for (let i = 0; i < tweets.length; i++) {
+      if (tweets[i].id === id) return tweets[i];
+    }
+    return {};
+  };
+
+  const validateTweet = (tweet) => {
+    
+    if (typeof tweet.id !== 'string' || tweet.id.length === 0) return false;
+    if (typeof tweet.text !== 'string' || tweet.text.length > 280 || tweet.text.length === 0) return false;
+    if (!(tweet.createdAt instanceof Date)) return false;
+    if (typeof tweet.author !== 'string' || tweet.author.length === 0) return false;
+    if (!(tweet.comments instanceof Array)) return false;
+    
+    if (tweet.comments.length > 0) {
+      const everyValid = tweet.comments.every((comment) => {
+        if (typeof comment.id !== 'string' || comment.id.length === 0) return false;
+        if (typeof comment.text !== 'string' || comment.text.length > 280 || comment.text.length === 0) return false;
+        if (!(comment.createdAt instanceof Date)) return false;
+        if (typeof comment.author !== 'string' || comment.author.length === 0) return false;
+        return true;
+      })
+      if (!everyValid) return false;
+    }
+
+    return true;
   };
   
   return {
-  //  test,
-  getTweets,
+    getTweets,
+    getTweet,
+    validateTweet,
   }
 })();
+
+//myModule.getTweets(0, 20,{dateFrom: new Date(1644660000000)})
+// myModule.getTweet('11')
