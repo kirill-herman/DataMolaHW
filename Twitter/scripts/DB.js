@@ -39,7 +39,7 @@ const tweets = [
       },
     ],
   },
-]
+];
 
 const msPerMin = 100000;
 
@@ -63,7 +63,7 @@ for (let i = tweets.length; i < 20; i++) {
         author: 'Oleg',
       },
     ]
-  })
+  });
   
 }
 
