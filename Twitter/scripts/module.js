@@ -1,5 +1,8 @@
 ;const myModule = (function() {
+  
   let user = 'Kirill';
+
+  const maxTextLength = 280;
   
   const getTweets = (skip = 0, top = 10, filterConfig = {}) => {
     const resultTweetsArr = [];
@@ -50,7 +53,7 @@
   const validateTweet = (tweet) => {
     
     if (typeof tweet.id !== 'string' || tweet.id.length === 0) return false;
-    if (typeof tweet.text !== 'string' || tweet.text.length > 280 || tweet.text.length === 0) return false;
+    if (typeof tweet.text !== 'string' || tweet.text.length > maxTextLength || tweet.text.length === 0) return false;
     if (!(tweet.createdAt instanceof Date)) return false;
     if (typeof tweet.author !== 'string' || tweet.author.length === 0) return false;
     if (!(tweet.comments instanceof Array)) return false;
@@ -58,7 +61,7 @@
     if (tweet.comments.length > 0) {
       const everyValid = tweet.comments.every((comment) => {
         if (typeof comment.id !== 'string' || comment.id.length === 0) return false;
-        if (typeof comment.text !== 'string' || comment.text.length > 280 || comment.text.length === 0) return false;
+        if (typeof comment.text !== 'string' || comment.text.length > maxTextLength || comment.text.length === 0) return false;
         if (!(comment.createdAt instanceof Date)) return false;
         if (typeof comment.author !== 'string' || comment.author.length === 0) return false;
         return true;
@@ -68,13 +71,52 @@
 
     return true;
   };
+
+  const addTweet = (text) => {
+
+    const tweet = {
+      id: +tweets[tweets.length - 1].id + 1 + '',
+      text: text,
+      createdAt: new Date(),
+      author: user,
+      comments: []
+    };
+
+    if (validateTweet(tweet)) {
+      tweets.push(tweet);
+      return true;
+    } else return false;
+  };
+
+  const editTweet = (id, text) => {
+    const tweet = getTweet(id + '');
+    
+    if (user === tweet.author && (typeof text === 'string') && text.length <= maxTextLength) {
+      tweet.text = text;
+      return true;
+    } else return false;
+  };
+
+  const removeTweet = (id) => {
+    const tweet = getTweet(id + '');
+    const indexOfTweet = tweets.indexOf(tweet);
+
+    if (user === tweet.author && indexOfTweet >= 0) {
+      tweets.splice(indexOfTweet, 1);
+      return true;
+    } else return false;
+  };
   
   return {
     getTweets,
     getTweet,
     validateTweet,
+    addTweet,
+    editTweet,
+    removeTweet,
   }
 })();
 
 //myModule.getTweets(0, 20,{dateFrom: new Date(1644660000000)})
-// myModule.getTweet('11')
+//myModule.getTweet('11')
+// myModule.editTweet('17', 'sadasdasdasdasdas')
