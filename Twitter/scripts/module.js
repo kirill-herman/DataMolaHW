@@ -59,13 +59,7 @@
     if (!(tweet.comments instanceof Array)) return false;
     
     if (tweet.comments.length > 0) {
-      const everyValid = tweet.comments.every((comment) => {
-        if (typeof comment.id !== 'string' || comment.id.length === 0) return false;
-        if (typeof comment.text !== 'string' || comment.text.length > maxTextLength || comment.text.length === 0) return false;
-        if (!(comment.createdAt instanceof Date)) return false;
-        if (typeof comment.author !== 'string' || comment.author.length === 0) return false;
-        return true;
-      })
+      const everyValid = tweet.comments.every((comment) => validateComment(comment))
       if (!everyValid) return false;
     }
 
@@ -75,7 +69,7 @@
   const addTweet = (text) => {
 
     const tweet = {
-      id: +tweets[tweets.length - 1].id + 1 + '',
+      id: (tweets[tweets.length - 1]) ? (+tweets[tweets.length - 1].id + 1 + '') : '0',
       text: text,
       createdAt: new Date(),
       author: user,
@@ -106,6 +100,37 @@
       return true;
     } else return false;
   };
+
+  const validateComment = (comment) => {
+    if (typeof comment.id !== 'string' || comment.id.length === 0) return false;
+    if (typeof comment.text !== 'string' || comment.text.length > maxTextLength || comment.text.length === 0) return false;
+    if (!(comment.createdAt instanceof Date)) return false;
+    if (typeof comment.author !== 'string' || comment.author.length === 0) return false;
+    return true;
+  };
+
+  const addComment = (id, text) => {
+    const tweet = getTweet(id + '');
+
+    if (Object.keys(tweet).length === 0) return false;
+    if (text.length > maxTextLength || typeof text !== 'string') return false;
+
+    const comment = {
+      id: (tweet.comments[tweet.comments.length - 1]) ? (+tweet.comments[tweet.comments.length - 1].id + 1 + '') : (id + '' + 1),
+      text: text,                                                    
+      createdAt: new Date(),
+      author: user,
+    };
+    
+    tweet.comments.push(comment);
+
+    return true;
+  };
+
+  const changeUser = (newUser) => {
+    user = newUser;
+  };
+
   
   return {
     getTweets,
@@ -114,9 +139,19 @@
     addTweet,
     editTweet,
     removeTweet,
+    validateComment,
+    addComment,
+    changeUser,
   }
 })();
 
-//myModule.getTweets(0, 20,{dateFrom: new Date(1644660000000)})
-//myModule.getTweet('11')
+// myModule.getTweets(0, 20,{dateFrom: new Date(1644660000000)})
+// myModule.getTweet('11')
 // myModule.editTweet('17', 'sadasdasdasdasdas')
+// myModule.validateTweet(tweets[1]) 
+
+// for (let i = 0; i < 20; i++) {myModule.removeTweet(i)}
+// myModule.changeUser('NeKirill')
+// myModule.removeTweet(0)
+// myModule.addTweet('testestetdast')
+// myModule.addComment('0', 'dsadasdqwdqdqdqwdqd')
