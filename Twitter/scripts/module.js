@@ -1,13 +1,13 @@
 ;const myModule = (function() {
   
   let user = 'Kirill';
+  let id = '50';
 
   const maxTextLength = 280;
   
   const getTweets = (skip = 0, top = 10, filterConfig = {}) => {
     const resultTweetsArr = [];
-
-    let workingTweetsArr = tweets.slice(skip);
+    let workingTweetsArr = tweets;
     
     if (Object.keys(filterConfig).length !== 0) {                               
       
@@ -35,17 +35,19 @@
 
     }
 
-    for (let i = 0; i < top; i++) {
+    workingTweetsArr = workingTweetsArr.sort((a, b) => b.createdAt - a.createdAt)
+
+    for (let i = skip; i < skip + top; i++) {
       if(workingTweetsArr[i] === undefined) break;
       resultTweetsArr.push(workingTweetsArr[i])      
     }
 
-    return resultTweetsArr.sort((a, b) => b.createdAt - a.createdAt);
+    return resultTweetsArr;
   };
 
   const getTweet = (id) => {
     for (let i = 0; i < tweets.length; i++) {
-      if (tweets[i].id === id) return tweets[i];
+      if (tweets[i].id === id + '') return tweets[i];
     }
     return {};
   };
@@ -69,7 +71,7 @@
   const addTweet = (text) => {
 
     const tweet = {
-      id: (tweets[tweets.length - 1]) ? (+tweets[tweets.length - 1].id + 1 + '') : '0',
+      id: (tweets.sort((a, b) => a.id - b.id)[tweets.length - 1]) ? (+tweets.sort((a, b) => a.id - b.id)[tweets.length - 1].id + 1 + '') : '0',
       text: text,
       createdAt: new Date(),
       author: user,
@@ -85,6 +87,8 @@
   const editTweet = (id, text) => {
     const tweet = getTweet(id + '');
     
+    if (!validateTweet(tweet)) return false; 
+
     if (user === tweet.author && (typeof text === 'string') && text.length <= maxTextLength) {
       tweet.text = text;
       return true;
@@ -116,11 +120,13 @@
     if (text.length > maxTextLength || typeof text !== 'string') return false;
 
     const comment = {
-      id: (tweet.comments[tweet.comments.length - 1]) ? (+tweet.comments[tweet.comments.length - 1].id + 1 + '') : (id + '' + 1),
+      id: (tweet.comments.sort((a, b) => a.id - b.id)[tweet.comments.length - 1]) ? (+tweet.comments.sort((a, b) => a.id - b.id)[tweet.comments.length - 1].id + 1 + '') : (id + '' + 1),
       text: text,                                                    
       createdAt: new Date(),
       author: user,
     };
+
+    if (!validateComment(comment)) return false;
     
     tweet.comments.push(comment);
 
@@ -155,3 +161,27 @@
 // myModule.removeTweet(0)
 // myModule.addTweet('testestetdast')
 // myModule.addComment('0', 'dsadasdqwdqdqdqwdqd')
+
+
+myModule.getTweets();
+myModule.getTweets(5, 15);
+myModule.getTweets(0, 5, {author: "Kirill"});
+myModule.changeUser('NeKirill');
+
+for (let i = 0; i < 10; i++) {
+  myModule.addTweet('tweet #text ' + i);
+}
+
+myModule.getTweets(0, 5, {author: "Kisadadasd"});
+myModule.getTweets(0, 0, {author: "NeKirill"});
+myModule.getTweets(0, 5, {asdauthor: "Kisadadasd"});
+myModule.getTweets(0, 40, {author: "NeKirill"});
+myModule.getTweets(10, 40, {author: "NeKirill"});
+myModule.getTweets(0,40, {hashtags: ['#text'], text: '3'})
+myModule.getTweets(0,40, {hashtags: ['#text']})
+
+myModule.getTweet(1)
+myModule.getTweet("2")
+myModule.getTweet("2dsadas")
+
+myModule.addTweet(212);
