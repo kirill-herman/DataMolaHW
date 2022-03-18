@@ -1,4 +1,4 @@
-const arr =  [1,2,2,3,4,5]
+const arr =  [2,1,4,5,2,9,7]
 
 function calc (arr) {
   let max = 0;
@@ -16,6 +16,7 @@ function calc (arr) {
       for (let j = i; j < arr.length; j++) {
         if (arr[j] > arr[j + 1]) {
           sum += arr[j] - share;
+          i = j;
           break;
         }
         if (j + 1 === arr.length) {
