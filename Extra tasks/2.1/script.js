@@ -1,12 +1,12 @@
-const arr = [-2,1,-3,4,-1,2,1,-5,4];
+const testArr = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
 
-function calc (arr) {
+function calc(arr) {
   let max = -Infinity;
   let sum = 0;
-  
-  for (let i = 0; i < arr.length; i++) {
+
+  for (let i = 0; i < arr.length; i += 1) {
     sum = 0;
-    for (let j = i; j < arr.length; j++) {
+    for (let j = i; j < arr.length; j += 1) {
       sum += arr[j];
       if (sum > max) max = sum;
     }
@@ -15,4 +15,4 @@ function calc (arr) {
   return max;
 }
 
-console.log(calc(arr));
+console.log(calc(testArr));
