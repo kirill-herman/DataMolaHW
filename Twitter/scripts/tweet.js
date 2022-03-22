@@ -1,7 +1,7 @@
 class Tweet {
   static maxTextLength = 280;
   
-  constructor (id = this._getNewID(), createAt = new Date(), author = TweetCollection.user, text, comments = []) {
+  constructor (text, id = this._getNewID(), createAt = new Date(), author = TweetCollection.user, comments = []) {
     this._id = id;
     this._createAt = createAt;
     this._author = author;
@@ -47,7 +47,7 @@ class Tweet {
   }
 
   addComment(id, text) {
-    const comment = new Comment(id, text);
+    const comment = new Comment(text, id);
     if (!validateComment(comment)) return false;
 
     this.comments.push(comment);
@@ -119,8 +119,12 @@ class TweetCollection {
     TweetCollection._user = value;
   }
 
+  constructor(tweets = []) {
+    this.tweets = tweets;
+  }
+
   getPage(skip = 0, top = 10, filterConfig = {}) {
-    let workingTweetsArr = tweets;
+    let workingTweetsArr = this.tweets;
     
     if (Object.keys(filterConfig).length !== 0) {                                 
       workingTweetsArr = workingTweetsArr.filter((tweet) => {
@@ -152,10 +156,9 @@ class TweetCollection {
   };
 
   getTweet(id) {
-    for (let i = 0; i < tweets.length; i++) {
-      if (tweets[i].id === id + '') return tweets[i];
-    }
-    return null;
+    return this.tweets.find((tweet) => tweet.id === id);
   };
+
+
   
 }
