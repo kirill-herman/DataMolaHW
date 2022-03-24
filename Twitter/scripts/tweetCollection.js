@@ -1,4 +1,6 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-underscore-dangle */
+// eslint-disable-next-line no-unused-vars
 class TweetCollection {
   static _user = 'Kirill';
 
@@ -79,8 +81,11 @@ class TweetCollection {
 
   addAll(tweets) {
     return tweets.map((tweet) => {
-      if (Tweet.validate(tweet)) this._tweets.push(tweet);
-      else return tweet;
+      if (Tweet.validate(tweet)) {
+        this._tweets.push(tweet);
+        return undefined;
+      }
+      return tweet;
     }).filter((elem) => elem !== undefined);
   }
 
@@ -89,4 +94,18 @@ class TweetCollection {
   }
 }
 
-const tweetColl = new TweetCollection();
+// const tweetColl = new TweetCollection();
+// tweets[0].id = 0;
+// tweetColl.addAll(tweets);
+// tweetColl.add('Hi');
+// tweetColl.get(1).addComment('32131312313', 'sadasda');
+// TweetCollection.user = 'newUser';
+// tweetColl.edit(1, 'puupa');
+// TweetCollection.user = 'Kirill';
+// tweetColl.edit(1, 'puupa');
+// tweetColl.getPage(10, 10, { author: 'Kirill' });
+// TweetCollection.user = 'newUser';
+// tweetColl.add('newnewnewnewnewnewe');
+// tweetColl.getPage(0, 40, { author: 'newUser' });
+// tweetColl.remove('1654765838564');
+// tweetColl.clear();

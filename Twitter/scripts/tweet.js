@@ -8,12 +8,12 @@ class Tweet {
   constructor(
     text,
     id = this._getNewID(),
-    createAt = new Date(),
+    createdAt = new Date(),
     author = TweetCollection.user,
     comments = [],
   ) {
     this._id = id;
-    this._createAt = createAt;
+    this._createdAt = createdAt;
     this._author = author;
 
     this.text = text;
@@ -28,11 +28,11 @@ class Tweet {
     console.log('can\'t set id');
   }
 
-  get createAt() {
-    return this._createAt;
+  get createdAt() {
+    return this._createdAt;
   }
 
-  set createAt(date) {
+  set createdAt(date) {
     console.log('can\'t set date of creation');
   }
 

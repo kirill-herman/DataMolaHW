@@ -3,5 +3,8 @@ module.exports = {
   rules: {
     'linebreak-style': ['error', 'windows'],
   },
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
+  parserOptions: {
+    requireConfigFile: false,
+  },
 };
