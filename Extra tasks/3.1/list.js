@@ -26,13 +26,13 @@ class List {
   removeNode(i = this.lastIndex) {
     const removedNode = this._getNode(i);
     if(this.root.next && removedNode) {
+      this.lastIndex--;
       if (i === 0){
         this.root = this.root.next;
         return true;
       }
       const prevNode = this._getNode(i - 1);
       prevNode.next = removedNode.next;
-      removedNode = null;
       return true;
     }
     return false;
