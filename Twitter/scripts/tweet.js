@@ -59,14 +59,6 @@ class Tweet {
     return true;
   }
 
-  addComment(id, text) {
-    const comment = new Comment(text, id);
-    if (!Comment.validate(comment)) return false;
-
-    this.comments.push(comment);
-    return true;
-  }
-
   _getNewID() {
     return String(Date.now() + Math.floor(Math.random() * 1e10));
   }

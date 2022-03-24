@@ -92,13 +92,24 @@ class TweetCollection {
   clear() {
     this._tweets = [];
   }
+
+  addComment(id, text) {
+    const tweet = this.get(id);
+    if (!tweet) return false;
+
+    const comment = new Comment(text);
+    if (!Comment.validate(comment)) return false;
+
+    tweet.comments.push(comment);
+    return true;
+  }
 }
 
 // const tweetColl = new TweetCollection();
 // tweets[0].id = 0;
 // tweetColl.addAll(tweets);
 // tweetColl.add('Hi');
-// tweetColl.get(1).addComment('32131312313', 'sadasda');
+// tweetColl.addComment('1', 'sadasda');
 // TweetCollection.user = 'newUser';
 // tweetColl.edit(1, 'puupa');
 // TweetCollection.user = 'Kirill';
