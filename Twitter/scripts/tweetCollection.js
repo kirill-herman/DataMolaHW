@@ -2,7 +2,7 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line no-unused-vars
 class TweetCollection {
-  static _user = 'Kirill';
+  static _user = `Guest${Date.now()}`;
 
   static get user() {
     return TweetCollection._user;

@@ -17,7 +17,8 @@ class Tweet {
     this._author = author;
 
     this.text = text;
-    this.comments = comments;
+    this.comments = [];
+    comments.forEach((comment) => this.comments.push(new Comment(comment)));
   }
 
   get id() {

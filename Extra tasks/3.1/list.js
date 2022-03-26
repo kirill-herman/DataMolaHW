@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable max-classes-per-file */
 class Node {
   constructor(value, next = null) {
     this.value = value;
@@ -13,7 +15,7 @@ class List {
 
   addNode(value, i = this.lastIndex) {
     const prevNode = this._getNode(i);
-    if(prevNode) {
+    if (prevNode) {
       const newNode = new Node(value);
       newNode.next = prevNode.next;
       prevNode.next = newNode;
@@ -25,9 +27,9 @@ class List {
 
   removeNode(i = this.lastIndex) {
     const removedNode = this._getNode(i);
-    if(this.root.next && removedNode) {
+    if (this.root.next && removedNode) {
       this.lastIndex--;
-      if (i === 0){
+      if (i === 0) {
         this.root = this.root.next;
         return true;
       }
