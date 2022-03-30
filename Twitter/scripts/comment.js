@@ -1,6 +1,8 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-underscore-dangle */
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line import/extensions
+import TweetCollection from './tweetCollection.js';
+
 class Comment {
   static maxTextLength = 280;
 
@@ -49,3 +51,5 @@ class Comment {
     return String(Date.now() + Math.floor(Math.random() * 1e10)).split('').reverse().join('');
   }
 }
+
+export default Comment;
