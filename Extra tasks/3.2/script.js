@@ -57,3 +57,13 @@ const c = sub1(b); // 29
 const d = mul(sub(a, 1))(c); // 58
 
 console.log(a, b, c, d);
+
+function pipe(...args) {
+  return (arg) => args.reduce((accumulator, currentValue) => currentValue(accumulator), arg);
+}
+
+const doSmth = pipe(add(d), sub(c), mul(b), div(a));
+const result = doSmth(0);
+const x = pipe(add(1), mul(2))(3);
+
+console.log(result, x);
