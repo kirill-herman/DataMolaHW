@@ -364,7 +364,7 @@ main {
 }
 
 .twit-wrapper {
-  padding: 2.6% 0 2.6% 8.7%;
+  /* padding: 2.6% 0 2.6% 8.7%; */
   border: var(--component-border);
   position: sticky;
   background: var(--bg-color);

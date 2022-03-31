@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-underscore-dangle */
-// eslint-disable-next-line no-unused-vars
+import Tweet from "./tweet.js";
 class TweetCollection {
   static _user = `Guest${String(Date.now()).slice(-6)}`;
 

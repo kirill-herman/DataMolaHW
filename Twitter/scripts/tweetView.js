@@ -31,14 +31,20 @@ class TweetView {
       </div>
       </section>
     `);
+
+    const tweetFooter = tweet.querySelector('.twit-footer');
+
+    if (tweetObject.author === TweetCollection.user) {
+      tweetFooter.firstElementChild.classList.remove('hidden');
+    } else tweetFooter.firstElementChild.classList.add('hidden');
   }
 
   _getNormalDate(date) {
-    return date;
+    return date; // to do
   }
 
   _getTextWithHashtags(text) {
-    return text;
+    return text; // to do
   }
 
   _displayStatic() {
@@ -57,4 +63,6 @@ class TweetView {
   }
 }
 
-window.testTweetView = new TweetView('mainpage');
+window.testTweetView = new TweetView('main');
+
+export default TweetView;

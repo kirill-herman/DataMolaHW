@@ -1,7 +1,10 @@
 /* eslint-disable no-undef */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-underscore-dangle */
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line import/extensions
+import TweetCollection from './tweetCollection.js';
+import Comment from './comment.js';
+
 class Tweet {
   static maxTextLength = 280;
 
@@ -18,7 +21,9 @@ class Tweet {
 
     this.text = text;
     this.comments = [];
-    comments.forEach((comment) => this.comments.push(new Comment(comment)));
+    comments.forEach((comment) => this.comments.push(
+      new Comment(comment.text, comment.id, comment.createdAt, comment.author),
+    ));
   }
 
   get id() {
@@ -64,3 +69,5 @@ class Tweet {
     return String(Date.now() + Math.floor(Math.random() * 1e10));
   }
 }
+
+export default Tweet;

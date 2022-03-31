@@ -71,11 +71,11 @@ class TweetFeedView {
   }
 
   _getNormalDate(date) {
-    return date;
+    return date; // to do
   }
 
   _getTextWithHashtags(text) {
-    return text;
+    return text; // to do
   }
 
   _displayStatic() {
@@ -106,4 +106,6 @@ class TweetFeedView {
   }
 }
 
-window.test3213214314 = new TweetFeedView('mainpage');
+window.testTweetFeedView = new TweetFeedView('main');
+
+export default TweetFeedView;
