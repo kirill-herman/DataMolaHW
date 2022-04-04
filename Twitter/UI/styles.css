@@ -191,7 +191,7 @@ main {
   margin-left: 3%;
 }
 
-.twit-input button {
+.twit-input-footer button {
   width: 8vw;
   height: 2.8vh;
   border-radius: 20px;
@@ -220,7 +220,7 @@ main {
   list-style: none;
 }
 
-.breadcrumbs_links a {
+.breadcrumbs_links span {
   margin: 0 1vw;
 
   color: var(--button-color);
@@ -364,7 +364,7 @@ main {
 }
 
 .twit-wrapper {
-  padding: 2.6% 0 2.6% 8.7%;
+  /* padding: 2.6% 0 2.6% 8.7%; */
   border: var(--component-border);
   position: sticky;
   background: var(--bg-color);
