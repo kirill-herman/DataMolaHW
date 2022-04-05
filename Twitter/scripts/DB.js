@@ -46,10 +46,7 @@ import Comment from './comment.js'
 const msPerMin = 100000;
 const tweets = [];
 for (let i = tweets.length; i < 20; i++) {
-  tweets.push(new Tweet('Lorem ipsum dolor sit amet consectetur adipisicing elit. ' + i, i+'', new Date(Date.parse(new Date('2022-02-12T12:37')) + i * msPerMin), 'Kirill', [{ text: 'Wow!', id: i + '1', createdAt: new Date(Date.parse(new Date('2022-02-12T13:37')) + i * msPerMin), author: 'NeKirill' }]));
+  tweets.push(new Tweet('#Lorem ipsum #dolor sit amet consectetur adipisicing elit. ' + i, i+'', new Date(Date.parse(new Date('2022-02-12T12:37')) + i * msPerMin), 'Kirill', [{ text: 'Wow!', id: i + '1', createdAt: new Date(Date.parse(new Date('2022-02-12T13:37')) + i * msPerMin), author: 'NeKirill' }]));
 }
 
 export default tweets;
-// console.log(tweets[0].createdAt.getHours());   
-// console.log(tweets[0]);   
-// console.log(tweets[4]);   

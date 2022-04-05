@@ -57,7 +57,7 @@ header {
 
 }
 
-.header-buttons a {
+.header-buttons span{
   color: rgba(0, 0, 0, 0.5);
   text-decoration: none;
 }
@@ -373,11 +373,12 @@ main {
 }
 
 .comments-list {
-  margin: 0 16vw;
+  margin: 0 0 15vh 10vw;
+  text-align: right;
 }
 
 .comment {
-  width: 49.1vw;
+  width: 45vw;
   margin-bottom: 1.6%;
   background-color: #fff;
   border: var(--component-border);
@@ -433,7 +434,7 @@ main {
   background: var(--bg-color);
   position: fixed;
   bottom: 10vh;
-  width: 81vw;
+  width: 58vw;
   z-index: 2;
   border: var(--component-border);
   text-align: center;

@@ -14,13 +14,13 @@ class TweetFeedView {
     const loadButton = this._getLoadButtonElement();
     const maxTweetOnPage = 10;
 
-    for (let i = 0; i < tweets.length; i += 1) {
-      if (i === maxTweetOnPage) {
-        tweetFeed.append(loadButton);
-        break;
-      }
+    for (let i = 0; i < maxTweetOnPage; i += 1) {
       tweetFeed.append(this._getTweetElement(tweets[i]));
+      if (i === tweets.length - 1) {
+        return;
+      }
     }
+    tweetFeed.append(loadButton);
   }
 
   _getLoadButtonElement() {
@@ -71,11 +71,11 @@ class TweetFeedView {
   }
 
   _getNormalDate(date) {
-    return date; // to do
+    return `${(String(date.getDate()).length === 1) ? `0${date.getDate()}` : date.getDate()}.${(String(date.getMonth()).length === 1) ? `0${date.getMonth()}` : date.getMonth()}.${date.getFullYear()} ${(String(date.getHours()).length === 1) ? `0${date.getHours()}` : date.getHours()}:${(String(date.getMinutes()).length === 1) ? `0${date.getMinutes()}` : date.getMinutes()}`;
   }
 
   _getTextWithHashtags(text) {
-    return text; // to do
+    return text.replace(/#\w+/g, (hashtag) => `<span class="hashtags-in-text">${hashtag}</span>`);
   }
 
   _displayStatic() {
@@ -105,7 +105,5 @@ class TweetFeedView {
     `;
   }
 }
-
-window.testTweetFeedView = new TweetFeedView('main');
 
 export default TweetFeedView;

@@ -37,14 +37,38 @@ class TweetView {
     if (tweetObject.author === TweetCollection.user) {
       tweetFooter.firstElementChild.classList.remove('hidden');
     } else tweetFooter.firstElementChild.classList.add('hidden');
+
+    if (tweetObject.comments.length > 0) {
+      tweet.insertAdjacentHTML('beforeend', '<section class="comments-list"></section>');
+      for (let i = 0; i < tweetObject.comments.length; i += 1) {
+        tweet.lastElementChild.insertAdjacentHTML('beforeend', `
+          <div class="comment">
+            <div class="comment-header">
+              <h3>${tweetObject.comments[i].author}</h3>
+              <span>${this._getNormalDate(tweetObject.comments[i].createdAt)}</span>
+            </div>
+            <p class="comment-body">${tweetObject.comments[i].text}</p>
+          </div>
+        `);
+      }
+    }
+
+    tweet.insertAdjacentHTML('beforeend', `
+    <section class="comment-input">
+          <div class="comment-input-wrapper">
+            <textarea name=""></textarea>
+          </div>
+          <button type="submit">Post</button>
+      </section>
+    `);
   }
 
   _getNormalDate(date) {
-    return date; // to do
+    return `${(String(date.getDate()).length === 1) ? `0${date.getDate()}` : date.getDate()}.${(String(date.getMonth()).length === 1) ? `0${date.getMonth()}` : date.getMonth()}.${date.getFullYear()} ${(String(date.getHours()).length === 1) ? `0${date.getHours()}` : date.getHours()}:${(String(date.getMinutes()).length === 1) ? `0${date.getMinutes()}` : date.getMinutes()}`;
   }
 
   _getTextWithHashtags(text) {
-    return text; // to do
+    return text.replace(/#\w+/g, (hashtag) => `<span class="hashtags-in-text">${hashtag}</span>`);
   }
 
   _displayStatic() {
