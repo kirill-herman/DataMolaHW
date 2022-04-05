@@ -3,11 +3,10 @@ import HeaderView from "./HeaderView.js";
 import TweetFeedView from "./tweetFeedView.js";
 import TweetView from "./tweetView.js";
 import FilterView from "./filterView.js";
-import tweets from "./DB.js";
 
 class TweeterController {
   constructor() {
-    this.tweetCollection = new TweetCollection();
+    this.tweetCollection = new TweetCollection(JSON.parse(localStorage.getItem('tweets')));
     this.headerView = new HeaderView('header');
     this.tweetFeedView = new TweetFeedView('main');
     this.filterView = new FilterView('filter');
@@ -51,4 +50,4 @@ class TweeterController {
 
 // filterView.display();
 
-window.tweets = tweets;
+window.model = new TweetCollection(JSON.parse(localStorage.getItem('tweets')));

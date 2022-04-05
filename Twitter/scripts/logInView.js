@@ -1,19 +1,19 @@
 import HeaderView from "./HeaderView.js";
 
-class SignUpView {
+class LogInView {
   constructor(containerId) {
     this.containerId = containerId;
   }
 
   display() {
-    new HeaderView('header').displayRegistrationHeader();
-    const signUpContainer = document.querySelector(`#${this.containerId}`);
-    signUpContainer.innerHTML = `
+    new HeaderView('header').displayAuthorizationHeader();
+    const logInContainer = document.querySelector(`#${this.containerId}`);
+    logInContainer.innerHTML = `
       <nav class="breadcrumbs">
         <img class="breadcrumbs_img" src="images/home.svg" alt="home">
         <ul class="breadcrumbs_links">
           <li><span>Main</span>></li>
-          <li><span>Sign up<span>></li>
+          <li><span>Log in<span>></li>
         </ul>
       </nav>
       
@@ -21,7 +21,7 @@ class SignUpView {
         <div class="logo-big">
           <img src="images/LOGO.svg" alt="logo">
         </div>
-        <form id="sign-up-form">
+        <form id="log-in-form">
           <div class="sign-inputs">
             <div class="username">
               <input type="text" name="username" id="username" placeholder="username" required>
@@ -29,14 +29,11 @@ class SignUpView {
             <div class="password">
               <input type="password" name="password" id="password" placeholder="password" required>
             </div>
-            <div class="password">
-              <input type="password" name="password-confirm" id="password-confirm" placeholder="confirm password" required>
-            </div>
           </div>
           <div class="sign-buttons">
-            <input type="submit" value="Sign up">
-            <p>if you already have an account</p>
-            <span>Log in</span>
+            <input type="submit" value="Sign in">
+            <p>if you don't have an account yet</p>
+            <span>Sign up</span>
           </div>
         </form>
       </section>
@@ -44,4 +41,4 @@ class SignUpView {
   }
 }
 
-window.testSignUpView = new SignUpView('main');
+window.testLogInView = new LogInView('main');

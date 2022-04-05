@@ -34,6 +34,32 @@ class HeaderView {
       `;
     }
   }
+
+  displayAuthorizationHeader() {
+    const headerContainer = document.querySelector(`#${this.containerId}`);
+    headerContainer.innerHTML = `
+      <div class="logo">
+        <img src="images/LOGO.svg" alt="logo">
+      </div>
+    
+      <div class="greetings">
+        <h1>Sign up</h1>
+      </div>
+    `;
+  }
+
+  displayRegistrationHeader() {
+    const headerContainer = document.querySelector(`#${this.containerId}`);
+    headerContainer.innerHTML = `
+      <div class="logo">
+        <img src="images/LOGO.svg" alt="logo">
+      </div>
+    
+      <div class="greetings">
+        <h1>Log in</h1>
+      </div>
+    `;
+  }
 }
 
 window.testHeaderView = new HeaderView('header');
