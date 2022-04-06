@@ -7,20 +7,18 @@ class TweetFeedView {
     this.containerId = containerId;
   }
 
-  display(tweets) {
+  display(tweets, fullLength) {
     this._displayStatic();
 
     const tweetFeed = document.querySelector(`#${this.containerId}`).lastElementChild;
     const loadButton = this._getLoadButtonElement();
-    const maxTweetOnPage = 10;
 
-    for (let i = 0; i < maxTweetOnPage; i += 1) {
+    for (let i = 0; i < tweets.length; i += 1) {
       tweetFeed.append(this._getTweetElement(tweets[i]));
-      if (i === tweets.length - 1) {
-        return;
-      }
     }
-    tweetFeed.append(loadButton);
+    if (tweetFeed.childElementCount < fullLength) {
+      tweetFeed.append(loadButton);
+    }
   }
 
   _getLoadButtonElement() {
@@ -84,7 +82,7 @@ class TweetFeedView {
       <nav class="breadcrumbs">
         <img class="breadcrumbs_img" src="images/home.svg" alt="home">
         <ul class="breadcrumbs_links">
-          <li><span>Main</span>></li>
+          <li><span id="link-to-main">Main</span>></li>
         </ul>
       </nav>
 

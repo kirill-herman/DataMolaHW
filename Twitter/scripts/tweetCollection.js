@@ -2,7 +2,12 @@
 /* eslint-disable no-underscore-dangle */
 import Tweet from "./tweet.js";
 class TweetCollection {
-  static _user = `Guest${String(Date.now()).slice(-6)}`;
+  static _user = 'Guest';
+
+  constructor() {
+    this._tweets = [];
+    this._restore();
+  }
 
   static get user() {
     return TweetCollection._user;
@@ -10,11 +15,6 @@ class TweetCollection {
 
   static set user(value) {
     TweetCollection._user = value;
-  }
-
-  constructor() {
-    this._tweets = [];
-    this._restore();
   }
 
   getPage(skip = 0, top = 10, filterConfig = {}) {
@@ -113,8 +113,12 @@ class TweetCollection {
     return true;
   }
 
+  getLength() {
+    return this._tweets.length;
+  }
+
   _restore() {
-    const data = JSON.parse(localStorage.getItem('tweets'));
+    const data = JSON.parse(localStorage.getItem('tweets')) ?? [];
     this._tweets = data.map((tweet) => new Tweet(
       tweet.text,
       tweet._id,

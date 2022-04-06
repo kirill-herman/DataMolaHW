@@ -2,7 +2,17 @@
 class UserCollection {
   constructor() {
     this.users = [];
+    this._authorized = false;
     this._restore();
+  }
+
+  get authorized() {
+    return this._authorized;
+  }
+
+  set authorized(value) {
+    this._authorized = value;
+    this._save();
   }
 
   getUsers() {
@@ -10,8 +20,12 @@ class UserCollection {
   }
 
   addNewUser(user) {
-    this.users.push(user);
-    this._save();
+    if (!this.hasUser(user.name)) {
+      this.users.push(user);
+      this._save();
+      return true;
+    }
+    return false;
   }
 
   hasUser(username) {
@@ -19,10 +33,14 @@ class UserCollection {
   }
 
   _restore() {
-    this.users = JSON.parse(localStorage.getItem('users'));
+    this.users = JSON.parse(localStorage.getItem('users')) ?? [];
+    this.authorized = JSON.parse(localStorage.getItem('authorized')) ?? false;
   }
 
   _save() {
     localStorage.setItem('users', JSON.stringify(this.users));
+    localStorage.setItem('authorized', JSON.stringify(this.authorized));
   }
 }
+
+export default UserCollection;

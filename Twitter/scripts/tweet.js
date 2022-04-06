@@ -16,7 +16,7 @@ class Tweet {
     comments = [],
   ) {
     this._id = id;
-    this._createdAt = createdAt;
+    this._createdAt = new Date(Date.parse(createdAt));
     this._author = author;
 
     this.text = text;

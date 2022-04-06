@@ -24,6 +24,10 @@ class FilterView {
       </form>
     `);
   }
+
+  displayEmpty() {
+    document.querySelector(`#${this.containerId}`).innerHTML = '';
+  }
 }
 
 export default FilterView;

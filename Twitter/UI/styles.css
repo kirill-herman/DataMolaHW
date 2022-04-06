@@ -507,3 +507,7 @@ main {
 .sign-buttons span {
   font-size: 16px;
 }
+
+#link-to-main, #link-to-login, #link-to-signup, #logout {
+  cursor: pointer;
+}

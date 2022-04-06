@@ -17,7 +17,7 @@ class HeaderView {
         </div>
 
         <div class="header-buttons">
-          <span>Log out</span>
+          <span id="logout">Log out</span>
         </div>
       `;
     } else {
@@ -27,9 +27,9 @@ class HeaderView {
         </div>
       
         <div class="greetings">
-          <h1>Log in</h1>
+          <h1 id="link-to-login">Log in</h1>
           <br>
-          <h3>Sign up</h3>
+          <h3 id="link-to-signup">Sign up</h3>
         </div>
       `;
     }
@@ -43,7 +43,7 @@ class HeaderView {
       </div>
     
       <div class="greetings">
-        <h1>Sign up</h1>
+        <h1 id="link-to-signup">Sign up</h1>
       </div>
     `;
   }
@@ -56,7 +56,7 @@ class HeaderView {
       </div>
     
       <div class="greetings">
-        <h1>Log in</h1>
+        <h1 id="link-to-login">Log in</h1>
       </div>
     `;
   }
