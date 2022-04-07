@@ -140,7 +140,7 @@ main {
   z-index: 1;
 }
 
-.twit-input {
+#twit-input {
   width: 58vw;
   /* height: 24vh; */
   border: var(--component-border);

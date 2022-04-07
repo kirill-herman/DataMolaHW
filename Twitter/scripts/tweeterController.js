@@ -24,25 +24,24 @@ class TweeterController {
     TweetCollection.user = user;
     this.userModel.authorized = true;
     localStorage.setItem('currentUser', user);
-    this.headerView.display(true, user);
-    this.getFeed();
+    this.createMainPage();
   }
 
   addTweet(text) {
     if (this.tweetModel.add(text)) {
-      this.getFeed();
+      this.createMainPage();
     }
   }
 
   editTweet(id, text) {
     if (this.tweetModel.edit(id, text)) {
-      this.getFeed();
+      this.createMainPage();
     }
   }
 
   removeTweet(id) {
     if (this.tweetModel.remove(id)) {
-      this.getFeed();
+      this.createMainPage();
     }
   }
 
@@ -59,7 +58,7 @@ class TweeterController {
 
   addComment(id, text) {
     if (this.tweetModel.addComment(id, text)) {
-      this.getFeed();
+      this.createTweetPage(id);
     }
   }
 
@@ -84,9 +83,7 @@ class TweeterController {
     this.userModel.authorized = false;
     TweetCollection.user = 'Guest';
     localStorage.setItem('currentUser', 'Guest');
-    this.headerView.display();
-    this.getFeed();
-    this.filterView.display();
+    this.createMainPage();
   }
 
   createMainPage() {
@@ -94,56 +91,168 @@ class TweeterController {
     this.filterView.display();
     this.getFeed();
 
-    if (!this.userModel.authorized) {
-      document.querySelector('#link-to-login').addEventListener('click', () => { displayLogInPage(); });
-      document.querySelector('#link-to-signup').addEventListener('click', () => { displaySignUpPage(); });
+    // header
+    if (!this.userModel.authorized) { 
+      document.querySelector('#link-to-login').addEventListener('click', () => { this.createLogInPage(); });
+      document.querySelector('#link-to-signup').addEventListener('click', () => { this.createSignUpPage(); });
     } else {
       document.querySelector('#logout').addEventListener('click', () => { this.logOut(); });
     }
-    document.querySelector('#link-to-main').addEventListener('click', () => { displayStartPage(); });
+    document.querySelector('#link-to-main').addEventListener('click', () => { this.createMainPage(); });
+
+    // tweet-input
+    const tweetTextArea = document.querySelector('#tweet-textarea');
+    tweetTextArea.addEventListener('keydown', (e) => {
+      if (tweetTextArea.value.length >= 280 && e.keyCode !== 8) {
+        e.preventDefault();
+      }
+    });
+    tweetTextArea.addEventListener('keyup', () => {
+      if (tweetTextArea.value.length > 280) {
+        tweetTextArea.value = tweetTextArea.value.slice(0, 280);
+      }
+      document.querySelector('#char-counter').innerHTML = `${tweetTextArea.value.length}/280`;
+    });
+
+    document.querySelector('#tweet-submit').addEventListener('click', (e) => {
+      e.preventDefault();
+      const text = tweetTextArea.value;
+      if (text.length > 0) {
+        this.addTweet(text);
+        tweetTextArea.value = '';
+      }
+    });
+    // tweet-delete
+    document.querySelectorAll('#delete-button').forEach((button) => { // и тут я вспомнил про делегирование, но было слишком поздно :(
+      button.addEventListener('click', (e) => {
+        const { tweetId } = e.target.dataset;
+        this.removeTweet(tweetId);
+      });
+    });
+    // tweet-edit
+    document.querySelectorAll('#edit-button').forEach((button) => { // надо бы переделать
+      button.addEventListener('click', (e) => {
+        const { tweetId } = e.target.dataset;
+        const tweetBody = button.closest('.twit').querySelector('.twit-body');
+        const tweetTextOld = tweetBody.textContent;
+        tweetBody.setAttribute('contenteditable', true);
+        tweetBody.focus();
+        tweetBody.style = 'background: var(--bg-color)';
+        button.style = 'display: none';
+        tweetBody.insertAdjacentHTML('beforebegin', '<div id="tip" style="opacity: 0.7; text-align: center">Click enter to submit</div>');
+        tweetBody.addEventListener('keydown', (e) => {
+          if (tweetBody.textContent.length >= 280 && e.keyCode !== 8) {
+            e.preventDefault();
+          }
+          if (e.keyCode === 13) {
+            e.preventDefault();
+            if (tweetBody.textContent.length > 0) {
+              const text = tweetBody.innerHTML;
+              this.editTweet(tweetId, text);
+            } else this.editTweet(tweetId, tweetTextOld);
+            tweetBody.setAttribute('contenteditable', false);
+            tweetBody.style = 'background: none';
+          }
+        });
+      });
+    });
+
+    // on tweet page
+    document.querySelectorAll('#comments').forEach((button) => {
+      button.addEventListener('click', (e) => {
+        const { tweetId } = e.target.dataset;
+        this.createTweetPage(tweetId);
+      });
+    });
+  }
+
+  createLogInPage() {
+    this.logInView.display();
+    this.filterView.displayEmpty();
+    document.querySelectorAll('#link-to-signup').forEach((link) => {
+      link.addEventListener('click', () => { this.createSignUpPage(); });
+    });
+    document.querySelector('#link-to-main').addEventListener('click', () => { this.createMainPage(); });
+    document.querySelector('#login-submit').addEventListener('click', (e) => {
+      e.preventDefault();
+      const username = document.querySelector('#login-username').value;
+      const password = document.querySelector('#login-password').value;
+      this.authorized(username, password);
+    });
+  }
+
+  createSignUpPage() {
+    this.signUpView.display();
+    this.filterView.displayEmpty();
+    document.querySelectorAll('#link-to-login').forEach((link) => {
+      link.addEventListener('click', () => { this.createLogInPage(); });
+    });
+    document.querySelector('#link-to-main').addEventListener('click', () => { this.createMainPage(); });
+    document.querySelector('#signup-submit').addEventListener('click', (e) => {
+      e.preventDefault();
+      const username = document.querySelector('#signup-username').value;
+      const password = document.querySelector('#signup-password').value;
+      this.register(username, password);
+    });
+  }
+
+  createTweetPage(tweetId) {
+    this.showTweet(tweetId);
+    this.filterView.displayEmpty();
+
+    document.querySelector('#link-to-main').addEventListener('click', () => { this.createMainPage(); });
+
+    this.headerView.display(this.userModel.authorized, TweetCollection.user);
+    if (!this.userModel.authorized) {
+      document.querySelector('#link-to-login').addEventListener('click', () => { this.createLogInPage(); });
+      document.querySelector('#link-to-signup').addEventListener('click', () => { this.createSignUpPage(); });
+    } else {
+      document.querySelector('#logout').addEventListener('click', () => { this.logOut(); });
+    }
+
+    // tweet-delete
+    document.querySelectorAll('#delete-button').forEach((button) => { // и тут я вспомнил про делегирование, но было слишком поздно :(
+      button.addEventListener('click', (e) => {
+        const { tweetId } = e.target.dataset;
+        this.removeTweet(tweetId);
+      });
+    });
+
+    // tweet-edit
+    document.querySelector('#edit-button').addEventListener('click', (e) => {
+      const { tweetId } = e.target.dataset;
+      const tweetBody = e.target.closest('.twit').querySelector('.twit-body');
+      const tweetTextOld = tweetBody.textContent;
+      tweetBody.setAttribute('contenteditable', true);
+      tweetBody.focus();
+      tweetBody.style = 'background: var(--bg-color)';
+      e.target.style = 'display: none';
+      tweetBody.insertAdjacentHTML('beforebegin', '<div id="tip" style="opacity: 0.7; text-align: center">Click enter to submit</div>');
+      tweetBody.addEventListener('keydown', (e) => {
+        if (tweetBody.textContent.length >= 280 && e.keyCode !== 8) {
+          e.preventDefault();
+        }
+        if (e.keyCode === 13) {
+          e.preventDefault();
+          if (tweetBody.textContent.length > 0) {
+            const text = tweetBody.innerHTML;
+            this.editTweet(tweetId, text);
+          } else this.editTweet(tweetId, tweetTextOld);
+          tweetBody.setAttribute('contenteditable', false);
+          tweetBody.style = 'background: none';
+        }
+      });
+    });
+
+    document.querySelector('#comment-submit').addEventListener('click', (e) => {
+      e.preventDefault();
+      const text = document.querySelector('#comment-text').value;
+      this.addComment(tweetId, text);
+    });
   }
 }
 
 const controller = new TweeterController();
 TweetCollection.user = localStorage.getItem('currentUser');
 
-function displayStartPage() {
-  controller.headerView.display(controller.userModel.authorized, TweetCollection.user);
-  controller.getFeed();
-  controller.filterView.display();
-  if (!controller.userModel.authorized) {
-    document.querySelector('#link-to-login').addEventListener('click', displayLogInPage);
-    document.querySelector('#link-to-signup').addEventListener('click', displaySignUpPage);
-  } else {
-    document.querySelector('#logout').addEventListener('click', () => { controller.logOut(); });
-  }
-  document.querySelector('#link-to-main').addEventListener('click', displayStartPage);
-}
-
-function displayLogInPage() {
-  controller.logInView.display();
-  controller.filterView.displayEmpty();
-  document.querySelectorAll('#link-to-signup').forEach((link) => {
-    link.addEventListener('click', displaySignUpPage);
-  });
-  document.querySelector('#link-to-main').addEventListener('click', displayStartPage);
-  document.querySelector('#login-submit').addEventListener('click', () => {
-    const username = document.querySelector('#login-username').value;
-    const password = document.querySelector('#login-password').value;
-    controller.authorized(username, password);
-  });
-}
-
-function displaySignUpPage() {
-  controller.signUpView.display();
-  controller.filterView.displayEmpty();
-  document.querySelectorAll('#link-to-login').forEach((link) => {
-    link.addEventListener('click', displayLogInPage);
-  });
-  document.querySelector('#link-to-main').addEventListener('click', displayStartPage);
-  document.querySelector('#signup-submit').addEventListener('click', () => {
-    const username = document.querySelector('#signup-username').value;
-    const password = document.querySelector('#signup-password').value;
-    controller.register(username, password);
-  });
-}
+controller.createMainPage();

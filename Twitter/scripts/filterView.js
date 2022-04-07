@@ -6,7 +6,7 @@ class FilterView {
 
   display() {
     const filterContainer = document.querySelector(`#${this.containerId}`);
-    filterContainer.insertAdjacentHTML('beforeend', `
+    filterContainer.innerHTML = `
       <form class="filters" action="">
         <h2>Filters</h2>
         <label for="">Author's name</label>
@@ -22,7 +22,7 @@ class FilterView {
         <input type="text" class="hashtags" name="" id="" placeholder="ignore">
         <button type="submit" class="find-button">Find</button>
       </form>
-    `);
+    `;
   }
 
   displayEmpty() {

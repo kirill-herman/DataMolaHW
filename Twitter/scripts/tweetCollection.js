@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-underscore-dangle */
 import Tweet from "./tweet.js";
+import Comment from "./comment.js";
 class TweetCollection {
   static _user = 'Guest';
 

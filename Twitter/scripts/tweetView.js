@@ -20,8 +20,8 @@ class TweetView {
         <p class="twit-body">${this._getTextWithHashtags(tweetObject.text)}</p>
         <div class="twit-footer">
           <div class="author-buttons">
-            <img style="padding: 4px;" src="images/Edit.svg" alt="">
-            <img src="images/Delete.svg" alt="">
+            <img data-tweet-id="${tweetObject.id}" id="edit-button" style="padding: 4px;" src="images/Edit.svg" alt="">
+            <img data-tweet-id="${tweetObject.id}" id="delete-button" src="images/Delete.svg" alt="">
           </div>
           <figure class="comments">
             <img src="images/Comment.svg" alt="comment">
@@ -56,15 +56,15 @@ class TweetView {
     tweet.insertAdjacentHTML('beforeend', `
     <section class="comment-input">
           <div class="comment-input-wrapper">
-            <textarea name=""></textarea>
+            <textarea id="comment-text" name=""></textarea>
           </div>
-          <button type="submit">Post</button>
+          <button id="comment-submit" data-tweet-id="${tweetObject.id}" type="submit">Post</button>
       </section>
     `);
   }
 
   _getNormalDate(date) {
-    return `${(String(date.getDate()).length === 1) ? `0${date.getDate()}` : date.getDate()}.${(String(date.getMonth()).length === 1) ? `0${date.getMonth()}` : date.getMonth()}.${date.getFullYear()} ${(String(date.getHours()).length === 1) ? `0${date.getHours()}` : date.getHours()}:${(String(date.getMinutes()).length === 1) ? `0${date.getMinutes()}` : date.getMinutes()}`;
+    return `${(String(date.getDate()).length === 1) ? `0${date.getDate()}` : date.getDate()}.${(String(date.getMonth()).length === 1) ? `0${date.getMonth() + 1}` : date.getMonth() + 1}.${date.getFullYear()} ${(String(date.getHours()).length === 1) ? `0${date.getHours()}` : date.getHours()}:${(String(date.getMinutes()).length === 1) ? `0${date.getMinutes()}` : date.getMinutes()}`;
   }
 
   _getTextWithHashtags(text) {
@@ -77,7 +77,7 @@ class TweetView {
       <nav class="breadcrumbs">
         <img class="breadcrumbs_img" src="images/home.svg" alt="home">
         <ul class="breadcrumbs_links">
-          <li><span>Main</span>></li>
+          <li><span id="link-to-main">Main</span>></li>
           <li><span>Tweet<span>></li>
         </ul>
       </nav>
