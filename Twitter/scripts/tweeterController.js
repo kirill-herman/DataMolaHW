@@ -157,12 +157,26 @@ class TweeterController {
       });
     });
 
-    // on tweet page
+    // link to tweet page
     document.querySelectorAll('#comments').forEach((button) => {
       button.addEventListener('click', (e) => {
         const { tweetId } = e.target.dataset;
         this.createTweetPage(tweetId);
       });
+    });
+
+    // filter
+    document.querySelector('aside').addEventListener('click', (e) => {
+      if (e.target.id === 'filter-submit') {
+        e.preventDefault();
+        const filterConfig = {};
+        if (document.querySelector('#filter-author').value.length > 0) filterConfig.author = document.querySelector('#filter-author').value;
+        if (document.querySelector('#filter-date-from').value.length > 0) filterConfig.dateFrom = document.querySelector('#filter-date-from').value;
+        if (document.querySelector('#filter-date-to').value.length > 0) filterConfig.dateTo = document.querySelector('#filter-date-to').value;
+        if (document.querySelector('#filter-hashtag').value.length > 0) filterConfig.hashtag = document.querySelector('#filter-hashtag').value.split(' ');
+        if (document.querySelector('#filter-text').value.length > 0) filterConfig.text = document.querySelector('#filter-text').value;
+        this.getFeed(0, 10, filterConfig);
+      }
     });
   }
 
@@ -209,40 +223,6 @@ class TweeterController {
     } else {
       document.querySelector('#logout').addEventListener('click', () => { this.logOut(); });
     }
-
-    // tweet-delete
-    document.querySelectorAll('#delete-button').forEach((button) => { // и тут я вспомнил про делегирование, но было слишком поздно :(
-      button.addEventListener('click', (e) => {
-        const { tweetId } = e.target.dataset;
-        this.removeTweet(tweetId);
-      });
-    });
-
-    // tweet-edit
-    document.querySelector('#edit-button').addEventListener('click', (e) => {
-      const { tweetId } = e.target.dataset;
-      const tweetBody = e.target.closest('.twit').querySelector('.twit-body');
-      const tweetTextOld = tweetBody.textContent;
-      tweetBody.setAttribute('contenteditable', true);
-      tweetBody.focus();
-      tweetBody.style = 'background: var(--bg-color)';
-      e.target.style = 'display: none';
-      tweetBody.insertAdjacentHTML('beforebegin', '<div id="tip" style="opacity: 0.7; text-align: center">Click enter to submit</div>');
-      tweetBody.addEventListener('keydown', (e) => {
-        if (tweetBody.textContent.length >= 280 && e.keyCode !== 8) {
-          e.preventDefault();
-        }
-        if (e.keyCode === 13) {
-          e.preventDefault();
-          if (tweetBody.textContent.length > 0) {
-            const text = tweetBody.innerHTML;
-            this.editTweet(tweetId, text);
-          } else this.editTweet(tweetId, tweetTextOld);
-          tweetBody.setAttribute('contenteditable', false);
-          tweetBody.style = 'background: none';
-        }
-      });
-    });
 
     document.querySelector('#comment-submit').addEventListener('click', (e) => {
       e.preventDefault();
