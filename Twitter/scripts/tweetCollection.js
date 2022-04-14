@@ -114,7 +114,7 @@ class TweetCollection {
     return true;
   }
 
-  getLength() {
+  getTweetsLength() {
     return this._tweets.length;
   }
 

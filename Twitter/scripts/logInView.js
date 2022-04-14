@@ -1,12 +1,11 @@
-import HeaderView from "./HeaderView.js";
-
+/* eslint-disable no-underscore-dangle */
 class LogInView {
-  constructor(containerId) {
+  constructor(containerId, controller) {
     this.containerId = containerId;
+    this.handler = this._createHandler(controller);
   }
 
   display() {
-    new HeaderView('header').displayAuthorizationHeader();
     const logInContainer = document.querySelector(`#${this.containerId}`);
     logInContainer.innerHTML = `
       <nav class="breadcrumbs">
@@ -38,6 +37,32 @@ class LogInView {
         </form>
       </section>
     `;
+  }
+
+  _createHandler(controller) {
+    const handler = (event) => {
+      if (event.target.id === 'link-to-main') {
+        controller.getFeed();
+      } else if (event.target.id === 'link-to-signup') {
+        controller.changeView('signup');
+      } else if (event.target.id === 'login-submit') {
+        event.preventDefault();
+        const username = document.querySelector('#login-username').value;
+        const password = document.querySelector('#login-password').value;
+        controller.authorized(username, password);
+      }
+    };
+    return handler;
+  }
+
+  addListeners() {
+    const logInContainer = document.querySelector(`#${this.containerId}`);
+    logInContainer.addEventListener('click', this.handler);
+  }
+
+  removeListeners() {
+    const logInContainer = document.querySelector(`#${this.containerId}`);
+    logInContainer.removeEventListener('click', this.handler);
   }
 }
 

@@ -511,3 +511,11 @@ main {
 #link-to-main, #link-to-login, #link-to-signup, #logout {
   cursor: pointer;
 }
+
+.twit-body .input-wrapper #tweet-textarea{
+  background: var(--bg-color);
+  resize: none;
+  height: 100%;
+  width: 100%;
+  padding: 0 2vw;
+}

@@ -2,8 +2,9 @@
 import TweetCollection from "./tweetCollection.js";
 
 class TweetView {
-  constructor(containerId) {
+  constructor(containerId, controller) {
     this.containerId = containerId;
+    this.handler = this._createHandler(controller);
   }
 
   display(tweetObject) {
@@ -84,6 +85,40 @@ class TweetView {
 
       <section id="tweetpage"></section>
     `;
+  }
+
+  _createHandler(controller) {
+    const handler = (event) => {
+      // if (event.target.id === 'edit-button') {
+      //   controller.editTweet(event.target.dataset.tweetId);
+      // } else
+      if (event.target.id === 'delete-button') {
+        controller.removeTweet(event.target.dataset.tweetId);
+      } else if (event.target.id === 'comment-submit') {
+        const commentText = document.querySelector('#comment-text');
+        controller.addComment(event.target.dataset.tweetId, commentText.value);
+        commentText.value = '';
+      } else if (event.target.id === 'link-to-main') {
+        controller.getFeed();
+      } else if (event.target.id === 'link-to-login') {
+        controller.changeView('login');
+      } else if (event.target.id === 'link-to-signup') {
+        controller.changeView('signup');
+      } else if (event.target.id === 'logout') {
+        controller.logout();
+      }
+    };
+    return handler;
+  }
+
+  addListeners() {
+    const mainContainer = document.querySelector(`#${this.containerId}`);
+    mainContainer.addEventListener('click', this.handler);
+  }
+
+  removeListeners() {
+    const mainContainer = document.querySelector(`#${this.containerId}`);
+    mainContainer.removeEventListener('click', this.handler);
   }
 }
 

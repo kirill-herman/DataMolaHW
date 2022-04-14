@@ -1,7 +1,9 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-undef */
 class FilterView {
-  constructor(containerId) {
+  constructor(containerId, controller) {
     this.containerId = containerId;
+    this.handler = this._createHandler(controller);
   }
 
   display() {
@@ -27,6 +29,38 @@ class FilterView {
 
   displayEmpty() {
     document.querySelector(`#${this.containerId}`).innerHTML = '';
+  }
+
+  _parseDate(date) {
+    const dateObj = `${date.split('.').reverse().join('-')}T00:00:00`;
+    return new Date(dateObj);
+  }
+
+  _createHandler(controller) {
+    const handler = (event) => {
+      if (event.target.id === 'filter-submit') {
+        event.preventDefault();
+        const filterConfig = {};
+        if (document.querySelector('#filter-author').value.length > 0) filterConfig.author = document.querySelector('#filter-author').value;
+        if (document.querySelector('#filter-date-from').value.length > 0) filterConfig.dateFrom = this._parseDate(document.querySelector('#filter-date-from').value);
+        if (document.querySelector('#filter-date-to').value.length > 0) filterConfig.dateTo = this._parseDate(document.querySelector('#filter-date-to').value);
+        if (document.querySelector('#filter-hashtag').value.length > 0) filterConfig.hashtags = document.querySelector('#filter-hashtag').value.split(' ');
+        if (document.querySelector('#filter-text').value.length > 0) filterConfig.text = document.querySelector('#filter-text').value;
+        console.log(filterConfig);
+        controller.getFeed(0, 10, filterConfig);
+      }
+    };
+    return handler;
+  }
+
+  addListeners() {
+    const filterContainer = document.querySelector(`#${this.containerId}`);
+    filterContainer.addEventListener('click', this.handler);
+  }
+
+  removeListeners() {
+    const filterContainer = document.querySelector(`#${this.containerId}`);
+    filterContainer.removeEventListener('click', this.handler);
   }
 }
 

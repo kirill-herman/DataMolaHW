@@ -1,18 +1,18 @@
 /* eslint-disable no-underscore-dangle */
 class UserCollection {
+  static _authorized = false;
+
   constructor() {
     this.users = [];
-    this._authorized = false;
     this._restore();
   }
 
-  get authorized() {
-    return this._authorized;
+  static get authorized() {
+    return UserCollection._authorized;
   }
 
-  set authorized(value) {
-    this._authorized = value;
-    this._save();
+  static set authorized(value) {
+    UserCollection._authorized = value;
   }
 
   getUsers() {
@@ -34,12 +34,12 @@ class UserCollection {
 
   _restore() {
     this.users = JSON.parse(localStorage.getItem('users')) ?? [];
-    this.authorized = JSON.parse(localStorage.getItem('authorized')) ?? false;
+    UserCollection.authorized = JSON.parse(localStorage.getItem('authorized')) ?? false;
   }
 
   _save() {
     localStorage.setItem('users', JSON.stringify(this.users));
-    localStorage.setItem('authorized', JSON.stringify(this.authorized));
+    localStorage.setItem('authorized', JSON.stringify(UserCollection.authorized));
   }
 }
 
