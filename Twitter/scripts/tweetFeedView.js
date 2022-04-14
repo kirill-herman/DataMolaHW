@@ -7,19 +7,17 @@ class TweetFeedView {
     this.containerId = containerId;
   }
 
-  display(tweets) {
+  display(tweets, fullLength) {
     this._displayStatic();
 
     const tweetFeed = document.querySelector(`#${this.containerId}`).lastElementChild;
     const loadButton = this._getLoadButtonElement();
-    const maxTweetOnPage = 10;
 
     for (let i = 0; i < tweets.length; i += 1) {
-      if (i === maxTweetOnPage) {
-        tweetFeed.append(loadButton);
-        break;
-      }
       tweetFeed.append(this._getTweetElement(tweets[i]));
+    }
+    if (tweetFeed.childElementCount < fullLength) {
+      tweetFeed.append(loadButton);
     }
   }
 
@@ -55,11 +53,11 @@ class TweetFeedView {
 
     tweetFooter.insertAdjacentHTML('beforeend', `
       <div class="author-buttons">
-        <img style="padding: 4px;" src="images/Edit.svg" alt="">
-        <img src="images/Delete.svg" alt="">
+        <img data-tweet-id="${tweetObject.id}" id="edit-button" style="padding: 4px;" src="images/Edit.svg" alt="">
+        <img data-tweet-id="${tweetObject.id}" id="delete-button" src="images/Delete.svg" alt="">
       </div>
       <figure class="comments">
-        <img src="images/Comment.svg" alt="comment">
+        <img id="comments" data-tweet-id="${tweetObject.id}" src="images/Comment.svg" alt="comment">
         <figcaption>${tweetObject.comments.length}</figcaption>
       </figure>
     `);
@@ -71,11 +69,11 @@ class TweetFeedView {
   }
 
   _getNormalDate(date) {
-    return date; // to do
+    return `${(String(date.getDate()).length === 1) ? `0${date.getDate()}` : date.getDate()}.${(String(date.getMonth()).length === 1) ? `0${date.getMonth() + 1}` : date.getMonth() + 1}.${date.getFullYear()} ${(String(date.getHours()).length === 1) ? `0${date.getHours()}` : date.getHours()}:${(String(date.getMinutes()).length === 1) ? `0${date.getMinutes()}` : date.getMinutes()}`;
   }
 
   _getTextWithHashtags(text) {
-    return text; // to do
+    return text.replace(/#\w+/g, (hashtag) => `<span class="hashtags-in-text">${hashtag}</span>`);
   }
 
   _displayStatic() {
@@ -84,7 +82,7 @@ class TweetFeedView {
       <nav class="breadcrumbs">
         <img class="breadcrumbs_img" src="images/home.svg" alt="home">
         <ul class="breadcrumbs_links">
-          <li><span>Main</span>></li>
+          <li><span id="link-to-main">Main</span>></li>
         </ul>
       </nav>
 
@@ -92,11 +90,11 @@ class TweetFeedView {
         <h2 class="twit-input_header">What's new?</h2>
         <form class="twit-input_form" action="">
           <div class="input-wrapper">
-            <textarea name=""></textarea>
+            <textarea id="tweet-textarea"></textarea>
           </div>
           <div class="twit-input-footer">
-            <span class="char-counter">0/280</span>
-            <button type="submit">Post</button>
+            <span id="char-counter" class="char-counter">0/280</span>
+            <button type="submit" id="tweet-submit">Post</button>
           </div>
         </form>
       </section>
@@ -105,7 +103,5 @@ class TweetFeedView {
     `;
   }
 }
-
-window.testTweetFeedView = new TweetFeedView('main');
 
 export default TweetFeedView;
