@@ -7,6 +7,7 @@ import FilterView from "./filterView.js";
 import LogInView from "./logInView.js";
 import SignUpView from "./signUpView.js";
 import UserCollection from "./userCollection.js";
+import tweets from "./DB.js";
 
 class TweeterController {
   constructor() {
@@ -152,6 +153,8 @@ class TweeterController {
 }
 
 window.tweeterController = new TweeterController();
+
+tweeterController.tweetModel.addAll(tweets);
 tweeterController.logOut();
 
 export default TweeterController;
