@@ -108,22 +108,26 @@ class TweetFeedView {
           <li><span id="link-to-main">Main</span>></li>
         </ul>
       </nav>
-
-      <section id="twit-input">
-        <h2 class="twit-input_header">What's new?</h2>
-        <form class="twit-input_form" action="">
-          <div class="input-wrapper">
-            <textarea id="tweet-textarea"></textarea>
-          </div>
-          <div class="twit-input-footer">
-            <span id="char-counter" class="char-counter">0/280</span>
-            <button type="submit" id="tweet-submit">Post</button>
-          </div>
-        </form>
-      </section>
-
-      <section id="tweet-feed"></section>
     `;
+    if (localStorage.getItem('authorized') === 'true') {
+      main.insertAdjacentHTML('beforeend', `
+        <section id="twit-input">
+          <h2 class="twit-input_header">What's new?</h2>
+          <form class="twit-input_form" action="">
+            <div class="input-wrapper">
+              <textarea id="tweet-textarea"></textarea>
+            </div>
+            <div class="twit-input-footer">
+              <span id="char-counter" class="char-counter">0/280</span>
+              <button type="submit" id="tweet-submit">Post</button>
+            </div>
+          </form>
+        </section>
+      `);
+    }
+    main.insertAdjacentHTML('beforeend', `
+      <section id="tweet-feed"></section>
+    `);
   }
 
   _createHandler(controller) {
