@@ -54,14 +54,16 @@ class TweetView {
       }
     }
 
-    tweet.insertAdjacentHTML('beforeend', `
-    <section class="comment-input">
-          <div class="comment-input-wrapper">
-            <textarea id="comment-text" name=""></textarea>
-          </div>
-          <button id="comment-submit" data-tweet-id="${tweetObject.id}" type="submit">Post</button>
-      </section>
-    `);
+    if (localStorage.getItem('authorized') === 'true') {
+      tweet.insertAdjacentHTML('beforeend', `
+      <section class="comment-input">
+            <div class="comment-input-wrapper">
+              <textarea id="comment-text" name=""></textarea>
+            </div>
+            <button id="comment-submit" data-tweet-id="${tweetObject.id}" type="submit">Post</button>
+        </section>
+      `);
+    }
   }
 
   _getNormalDate(date) {

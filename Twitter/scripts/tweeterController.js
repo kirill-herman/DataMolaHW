@@ -152,9 +152,12 @@ class TweeterController {
   }
 }
 
-window.tweeterController = new TweeterController();
+const tweeterController = new TweeterController();
 
 tweeterController.tweetModel.addAll(tweets);
-tweeterController.logOut();
+
+if (TweetCollection.user !== 'Guest') {
+  tweeterController.setCurrentUser(TweetCollection.user);
+} else tweeterController.logOut();
 
 export default TweeterController;

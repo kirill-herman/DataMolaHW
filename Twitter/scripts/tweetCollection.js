@@ -131,6 +131,7 @@ class TweetCollection {
       tweet._author,
       tweet.comments,
     ));
+    TweetCollection.user = localStorage.getItem('currentUser');
   }
 
   _save() {
