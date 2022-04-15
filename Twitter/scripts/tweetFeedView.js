@@ -189,16 +189,20 @@ class TweetFeedView {
     handler.keyup = () => {
       const tweetTextArea = document.querySelector('#tweet-textarea');
       const charCounter = document.querySelector('#char-counter');
-      if (tweetTextArea.value.length > 280) {
-        tweetTextArea.value = tweetTextArea.value.slice(0, 280);
+      if (tweetTextArea) {
+        if (tweetTextArea.value.length > 280) {
+          tweetTextArea.value = tweetTextArea.value.slice(0, 280);
+        }
+        charCounter.innerHTML = `${tweetTextArea.value.length}/280`;
       }
-      charCounter.innerHTML = `${tweetTextArea.value.length}/280`;
     };
 
     handler.keydown = (event) => {
       const tweetTextArea = document.querySelector('#tweet-textarea');
-      if (tweetTextArea.value.length > 280 && event.keyCode !== 8) {
-        event.preventDefault();
+      if (tweetTextArea) {
+        if (tweetTextArea.value.length > 280 && event.keyCode !== 8) {
+          event.preventDefault();
+        }
       }
     };
 
