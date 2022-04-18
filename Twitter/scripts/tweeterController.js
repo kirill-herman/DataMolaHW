@@ -8,9 +8,11 @@ import LogInView from "./logInView.js";
 import SignUpView from "./signUpView.js";
 import UserCollection from "./userCollection.js";
 import tweets from "./DB.js";
+import TweetFeedApiService from "./tweetFeedApiService.js";
 
 class TweeterController {
   constructor() {
+    this.tweeterApi = new TweetFeedApiService('https://jslabapi.datamola.com/');
     this.tweetModel = new TweetCollection();
     this.userModel = new UserCollection();
     this.headerView = new HeaderView('header', this);
@@ -153,11 +155,5 @@ class TweeterController {
 }
 
 const tweeterController = new TweeterController();
-
-tweeterController.tweetModel.addAll(tweets);
-
-if (TweetCollection.user !== 'Guest') {
-  tweeterController.setCurrentUser(TweetCollection.user);
-} else tweeterController.logOut();
 
 export default TweeterController;
