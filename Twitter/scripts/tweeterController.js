@@ -7,10 +7,12 @@ import FilterView from "./filterView.js";
 import LogInView from "./logInView.js";
 import SignUpView from "./signUpView.js";
 import UserCollection from "./userCollection.js";
-import tweets from "./DB.js";
+import TweetFeedApiService from "./tweetFeedApiService.js";
+import ErrorView from "./errorView.js";
 
 class TweeterController {
   constructor() {
+    this.tweeterApi = new TweetFeedApiService('https://jslabapi.datamola.com/');
     this.tweetModel = new TweetCollection();
     this.userModel = new UserCollection();
     this.headerView = new HeaderView('header', this);
@@ -19,9 +21,14 @@ class TweeterController {
     this.tweetView = new TweetView('main', this);
     this.logInView = new LogInView('main', this);
     this.signUpView = new SignUpView('main', this);
+    this.errorView = new ErrorView('main', this);
   }
 
-  static filter = {};
+  static currentFilter = {};
+
+  static currentTop = 0;
+
+  static currentTweets = [];
 
   setCurrentUser(user) {
     TweetCollection.user = user;
@@ -32,67 +39,135 @@ class TweeterController {
   }
 
   addTweet(text) {
-    if (this.tweetModel.add(text)) {
-      this.getFeed();
-    }
+    this.tweeterApi.addTweet(text)
+      .then(() => {
+        this.getFeed(0, TweeterController.currentTop, TweeterController.currentFilter);
+      })
+      .catch((err) => {
+        if (err.statusCode === 401) {
+          this.changeView('login');
+        } else {
+          this.changeView('error');
+          this.errorView.display(err);
+        }
+      });
   }
 
   editTweet(id, text) {
-    if (this.tweetModel.edit(id, text)) {
-      console.log('edit');
-    }
+    this.tweeterApi.editTweet(id, text)
+      .then(() => {
+        this.getFeed(0, TweeterController.currentTop, TweeterController.currentFilter);
+      })
+      .catch((err) => {
+        if (err.statusCode === 401) {
+          this.changeView('login');
+        } else {
+          this.changeView('error');
+          this.errorView.display(err);
+        }
+      });
   }
 
   removeTweet(id) {
-    if (this.tweetModel.remove(id)) {
-      this.getFeed();
-    }
+    this.tweeterApi.deleteTweet(id)
+      .then(() => {
+        this.getFeed(0, TweeterController.currentTop, TweeterController.currentFilter);
+      })
+      .catch((err) => {
+        if (err.statusCode === 401) {
+          this.changeView('login');
+        } else {
+          this.changeView('error');
+          this.errorView.display(err);
+        }
+      });
   }
 
-  loadMore(skip, top, filter = TweeterController.filter) {
-    this.getFeed(skip, top, filter);
+  loadMore(skip, top) {
+    TweeterController.currentTop = top;
+    this.getFeed(skip, top, TweeterController.currentFilter);
   }
 
   getFeed(skip = 0, top = 10, filterConfig = {}) {
-    TweeterController.filter = filterConfig;
-    const filtredModel = this.tweetModel.getPage(
-      0,
-      this.tweetModel.getTweetsLength(),
-      filterConfig,
-    );
-    this.tweetFeedView.display(this.tweetModel.getPage(skip, top, filterConfig));
-    if (filtredModel.length > top) {
-      this.tweetFeedView.displayLoadButton();
-    }
-    this.changeView('main');
+    TweeterController.currentFilter = filterConfig;
+
+    this.tweeterApi.getPage(skip, top, filterConfig)
+      .then((data) => {
+        this.tweetFeedView.display(data);
+        TweeterController.currentTweets = data;
+      })
+      .then(() => {
+        this.tweeterApi.getPage(top, 1, filterConfig)
+          .then((data) => {
+            if (data.length > 0) {
+              this.tweetFeedView.displayLoadButton();
+            }
+            this.changeView('main');
+          });
+      })
+      .catch((err) => {
+        this.changeView('error');
+        this.errorView.display(err);
+      });
   }
 
   showTweet(id) {
-    this.tweetView.display(this.tweetModel.get(id));
-    this.changeView('tweet');
+    this.tweeterApi.getPage(0, TweeterController.currentTop, TweeterController.currentFilter)
+      .then((data) => {
+        this.tweetView.display(data.find((tweet) => tweet.id === id));
+        this.changeView('tweet');
+      })
+      .catch((err) => {
+        this.changeView('error');
+        this.errorView.display(err);
+      });
   }
 
   addComment(id, text) {
-    if (this.tweetModel.addComment(id, text)) {
-      this.showTweet(id);
-    }
+    this.tweeterApi.addComment(id, text)
+      .then(() => {
+        this.showTweet(id);
+      })
+      .catch((err) => {
+        if (err.statusCode === 401) {
+          this.changeView('login');
+        } else {
+          this.changeView('error');
+          this.errorView.display(err);
+        }
+      });
   }
 
-  register(username, password, passwordConfirm) {
-    const user = { name: username, password };
-    if (password === passwordConfirm && this.userModel.addNewUser(user)) {
-      this.setCurrentUser(username);
+  register(username, password) {
+    this.tweeterApi.register(username, password)
+      .then(() => {
+        this.authorized(username, password);
+      })
+      .catch((err) => {
+        if (err.statusCode === 409) {
+          alert('login - "NeKirill" already exists');
+        } else {
+          this.changeView('error');
+          this.errorView.display(err);
+        }
+      });
     }
-    // else to do (view error)
   }
 
   authorized(username, password) {
-    const dataCorrect = this.userModel.getUsers()
-      .some((user) => user.name === username && user.password === password);
-    if (dataCorrect) {
-      this.setCurrentUser(username);
-    }
-    // else to do (view error)
+    this.tweeterApi.login(username, password)
+      .then((data) => {
+        localStorage.setItem('token', data.token);
+        this.setCurrentUser(username);
+      })
+      .catch((err) => {
+        if (err.statusCode === 403) {
+          alert(err.message);
+        } else {
+          this.changeView('error');
+          this.errorView.display(err);
+        }
+      });
   }
 
   logOut() {
@@ -100,6 +175,7 @@ class TweeterController {
     TweetCollection.user = 'Guest';
     localStorage.setItem('currentUser', 'Guest');
     localStorage.setItem('authorized', false);
+    localStorage.removeItem('token');
     this.getFeed();
   }
 
@@ -110,6 +186,7 @@ class TweeterController {
     this.filterView.removeListeners();
     this.signUpView.removeListeners();
     this.logInView.removeListeners();
+    this.errorView.removeListeners();
 
     switch (view) {
       case 'main':
@@ -146,6 +223,17 @@ class TweeterController {
         this.logInView.addListeners();
         break;
 
+      case 'error':
+        if (UserCollection.authorized) {
+          this.headerView.displayAuthorized();
+        } else {
+          this.headerView.displayNotAuthorized();
+        }
+        this.filterView.displayEmpty();
+        this.headerView.addListeners();
+        this.errorView.addListeners();
+        break;
+
       default:
         break;
     }
@@ -153,11 +241,14 @@ class TweeterController {
 }
 
 const tweeterController = new TweeterController();
+if (localStorage.getItem('authorized') === 'true') {
+  tweeterController.setCurrentUser(localStorage.getItem('currentUser'));
+} else {
+  tweeterController.logOut();
+}
 
-tweeterController.tweetModel.addAll(tweets);
-
-if (TweetCollection.user !== 'Guest') {
-  tweeterController.setCurrentUser(TweetCollection.user);
-} else tweeterController.logOut();
+setInterval(() => {
+  tweeterController.getFeed(0, TweeterController.currentTop, TweeterController.currentFilter);
+}, 300000);
 
 export default TweeterController;
