@@ -91,7 +91,8 @@ class TweetFeedView {
     return tweet;
   }
 
-  _getNormalDate(date) {
+  _getNormalDate(dateFromApi) {
+    const date = new Date(dateFromApi);
     return `${(String(date.getDate()).length === 1) ? `0${date.getDate()}` : date.getDate()}.${(String(date.getMonth()).length === 1) ? `0${date.getMonth() + 1}` : date.getMonth() + 1}.${date.getFullYear()} ${(String(date.getHours()).length === 1) ? `0${date.getHours()}` : date.getHours()}:${(String(date.getMinutes()).length === 1) ? `0${date.getMinutes()}` : date.getMinutes()}`;
   }
 
@@ -164,7 +165,7 @@ class TweetFeedView {
         const tweetTextOld = tweetBody.textContent;
         tweetBody.innerHTML = `
           <div class="input-wrapper">
-            <textarea id="tweet-textarea" width=100%></textarea>
+            <textarea id="tweet-textarea" width=100%>${tweetTextOld}</textarea>
           </div>
         `;
         event.target.style = 'visibility: hidden';
@@ -175,8 +176,9 @@ class TweetFeedView {
           }
           if (e.keyCode === 13) {
             e.preventDefault();
-            if (tweetBody.textContent.length > 0) {
-              const tweetTextNew = tweetBody.querySelector('#tweet-textarea').value;
+            const tweetTextNew = tweetBody.querySelector('#tweet-textarea').value;
+
+            if (tweetTextNew.length > 0) {
               controller.editTweet(tweetId, tweetTextNew);
               tweetBody.innerHTML = this._getTextWithHashtags(tweetTextNew);
             } else {

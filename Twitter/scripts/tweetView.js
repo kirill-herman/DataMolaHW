@@ -66,7 +66,8 @@ class TweetView {
     }
   }
 
-  _getNormalDate(date) {
+  _getNormalDate(dateFromApi) {
+    const date = new Date(dateFromApi);
     return `${(String(date.getDate()).length === 1) ? `0${date.getDate()}` : date.getDate()}.${(String(date.getMonth()).length === 1) ? `0${date.getMonth() + 1}` : date.getMonth() + 1}.${date.getFullYear()} ${(String(date.getHours()).length === 1) ? `0${date.getHours()}` : date.getHours()}:${(String(date.getMinutes()).length === 1) ? `0${date.getMinutes()}` : date.getMinutes()}`;
   }
 

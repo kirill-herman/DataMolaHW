@@ -519,3 +519,29 @@ main {
   width: 100%;
   padding: 0 2vw;
 }
+
+.error {
+  width: 58vw;
+  height: 86vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-img {
+  width: 90%;
+  height: 90%;
+}
+
+.error-text {
+  position: absolute;
+  right: 10vw;
+  margin-bottom: 10vh;
+  font-size: 40px;
+  font-weight: 600;
+  color: var(--button-color);
+  width: 50%;
+  height: 35%;
+  text-align: center;
+}
