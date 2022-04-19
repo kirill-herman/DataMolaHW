@@ -138,20 +138,19 @@ class TweeterController {
       });
   }
 
-  register(username, password, passwordConfirm) {
-    if (password === passwordConfirm) {
-      this.tweeterApi.register(username, password)
-        .then(() => {
-          this.authorized(username, password);
-        })
-        .catch((err) => {
-          if (err.statusCode === 409) {
-            alert('login - "NeKirill" already exists');
-          } else {
-            this.changeView('error');
-            this.errorView.display(err);
-          }
-        });
+  register(username, password) {
+    this.tweeterApi.register(username, password)
+      .then(() => {
+        this.authorized(username, password);
+      })
+      .catch((err) => {
+        if (err.statusCode === 409) {
+          alert('login - "NeKirill" already exists');
+        } else {
+          this.changeView('error');
+          this.errorView.display(err);
+        }
+      });
     }
   }
 
@@ -247,5 +246,9 @@ if (localStorage.getItem('authorized') === 'true') {
 } else {
   tweeterController.logOut();
 }
+
+setInterval(() => {
+  tweeterController.getFeed(0, TweeterController.currentTop, TweeterController.currentFilter);
+}, 300000);
 
 export default TweeterController;

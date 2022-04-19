@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-underscore-dangle */
 class SignUpView {
   constructor(containerId, controller) {
@@ -42,6 +43,13 @@ class SignUpView {
     `;
   }
 
+  _validateData(username, password, passwordConfirm) {
+    if (username.length < 3 || username.length > 18 || password.length < 3 || password.length > 18 || passwordConfirm !== password) { 
+      return false;
+    }
+    return true;
+  }
+
   _createHandler(controller) {
     const handler = (event) => {
       if (event.target.id === 'link-to-main') {
@@ -53,7 +61,11 @@ class SignUpView {
         const username = document.querySelector('#signup-username').value;
         const password = document.querySelector('#signup-password').value;
         const passwordConfirm = document.querySelector('#password-confirm').value;
-        controller.register(username, password, passwordConfirm);
+        if (this._validateData(username, password, passwordConfirm)) {
+          controller.register(username, password);
+        } else {
+          alert('incorrect data');
+        }
       }
     };
     return handler;

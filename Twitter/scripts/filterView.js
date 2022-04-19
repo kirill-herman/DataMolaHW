@@ -15,8 +15,8 @@ class FilterView {
         <input id="filter-author"name="author" type="text" class="author-name" placeholder="ignore">  
         <label for="">Date</label>
         <div class="filters-date">
-          <input id="filter-date-from" name="dateFrom" type="text" class="date-from" placeholder="from">  
-          <input id="filter-date-to" name="dateTo" type="text" class="date-to" placeholder="to">  
+          <input id="filter-date-from" name="dateFrom" type="text" class="date-from" placeholder="from dd:mm:yyyy">  
+          <input id="filter-date-to" name="dateTo" type="text" class="date-to" placeholder="to dd:mm:yyyy">  
         </div>
         <label for="">Twit text</label>
         <textarea id="filter-text" name="text" class="twit-text" placeholder="ignore"></textarea>
