@@ -86,7 +86,7 @@ class TweetCollection {
 
   addAll(tweets) {
     const notValidTweets = tweets.map((tweet) => {
-      if (Tweet.validate(tweet)) {
+      if (Tweet.validate(tweet) && !this.hasTweet(tweet)) {
         this._tweets.push(tweet);
         return undefined;
       }
@@ -95,6 +95,10 @@ class TweetCollection {
 
     this._save();
     return notValidTweets;
+  }
+
+  hasTweet(tweet) {
+    return this._tweets.some((t) => t.id === tweet.id);
   }
 
   clear() {
@@ -114,7 +118,7 @@ class TweetCollection {
     return true;
   }
 
-  getLength() {
+  getTweetsLength() {
     return this._tweets.length;
   }
 
@@ -127,6 +131,7 @@ class TweetCollection {
       tweet._author,
       tweet.comments,
     ));
+    TweetCollection.user = localStorage.getItem('currentUser');
   }
 
   _save() {

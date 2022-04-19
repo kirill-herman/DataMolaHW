@@ -1,12 +1,11 @@
-import HeaderView from "./HeaderView.js";
-
+/* eslint-disable no-underscore-dangle */
 class SignUpView {
-  constructor(containerId) {
+  constructor(containerId, controller) {
     this.containerId = containerId;
+    this.handler = this._createHandler(controller);
   }
 
   display() {
-    new HeaderView('header').displayRegistrationHeader();
     const signUpContainer = document.querySelector(`#${this.containerId}`);
     signUpContainer.innerHTML = `
       <nav class="breadcrumbs">
@@ -41,6 +40,33 @@ class SignUpView {
         </form>
       </section>
     `;
+  }
+
+  _createHandler(controller) {
+    const handler = (event) => {
+      if (event.target.id === 'link-to-main') {
+        controller.getFeed();
+      } else if (event.target.id === 'link-to-login') {
+        controller.changeView('login');
+      } else if (event.target.id === 'signup-submit') {
+        event.preventDefault();
+        const username = document.querySelector('#signup-username').value;
+        const password = document.querySelector('#signup-password').value;
+        const passwordConfirm = document.querySelector('#password-confirm').value;
+        controller.register(username, password, passwordConfirm);
+      }
+    };
+    return handler;
+  }
+
+  addListeners() {
+    const signUpContainer = document.querySelector(`#${this.containerId}`);
+    signUpContainer.addEventListener('click', this.handler);
+  }
+
+  removeListeners() {
+    const signUpContainer = document.querySelector(`#${this.containerId}`);
+    signUpContainer.removeEventListener('click', this.handler);
   }
 }
 
